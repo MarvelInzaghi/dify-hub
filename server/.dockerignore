@@ -1,0 +1,11 @@
+# Never bake local dev credentials or artifacts into the image.
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.db
+*.egg-info/
+tests/

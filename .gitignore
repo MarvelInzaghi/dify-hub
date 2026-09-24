@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+dist/
+build/
+.idea/
+.vscode/
+.DS_Store
+
+# --- dify-hub: secrets, runtime data, build artifacts ---
+*.tar
+*.db
+deploy/wheels/
+deploy/wheels-fastmcp/
+deploy/backend.env
+backend.env

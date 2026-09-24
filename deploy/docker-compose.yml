@@ -1,0 +1,40 @@
+# dify-hub production deployment (offline Docker).
+#   api -> FastAPI backend (SQLite on a named volume, connects to Dify via DIFY_BASE_URL)
+#   web -> nginx serving the built SPA + proxying /api and /v1 to api
+#
+# Offline flow:
+#   1. On a machine with Docker + internet:  ./build-offline.sh   (builds + saves *.tar)
+#   2. Copy this deploy/ directory + the two .tar files to the offline host.
+#   3. On the offline host:
+#        docker load -i dify-hub-api.tar
+#        docker load -i dify-hub-web.tar
+#        cd deploy && docker compose up -d
+#
+# Front door (web) is published on host port ${WEB_PORT:-8100}.
+services:
+  api:
+    image: dify-hub-api:0.1.0
+    restart: unless-stopped
+    env_file: .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - api_data:/data
+    networks:
+      - dify-hub-net
+
+  web:
+    image: dify-hub-web:0.1.0
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "${WEB_PORT:-8100}:80"
+    networks:
+      - dify-hub-net
+
+networks:
+  dify-hub-net:
+
+volumes:
+  api_data:
